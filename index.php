@@ -1,10 +1,12 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['user'])) {
-        header("Location: View/Login.php");
-        exit();
-    }
+<?php
+ob_start();
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: View/Login.php");
+    exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +21,7 @@
 <body>
     <div class="container-fluid">
         <!-- Header -->
-        <header class="container-fluild d-flex justify-content-center">
+        <header class="container-fluid d-flex justify-content-center">
             <div class="row container d-flex align-items-center">
                 <div class="col d-flex align-items-center">
                     <img src="View/img/logo-final.png" alt="Logo" width="80" height="80">
@@ -28,10 +30,18 @@
                 <div class="col d-flex align-items-center justify-content-around">
                     <div class="user d-flex align-items-center justify-content-between">
                         <i class="fa-solid fa-user"></i>
-                        <p class="user-name">Nguyễn Thị Ngọc Bích</p>
+                        <p class="user-name"><?php echo $_SESSION['user']; ?></p>
                     </div>
                     <div class="notification">
-                        <a href=""><i class="fa-solid fa-right-from-bracket"></i></a>
+                        <?php 
+                            if(isset($_SESSION['user'])) {
+                                echo '<a href="index.php?act=logout" onClick="return confirm(\'Bạn có thật sự muốn đăng xuất?\')">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </a>';
+                            }else {
+                                echo '<a href="index.php?act=login">Đăng nhập</a>';
+                            }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -40,12 +50,20 @@
         <!-- Main content -->
         <main class="container-fluid row">
             <!-- Sidebar -->
-            <?php 
-                include("View/Menu.php");
-            ?>
+            <?php include("View/Menu.php"); ?>
 
             <?php 
-                include("View/Section.php");
+                // Xác định hành động dựa trên $_GET['act']
+                $act = isset($_GET['act']) ? $_GET['act'] : 'danhSachSV';
+            
+                switch($act) {
+                    case 'themSV': include("View/ThemSV.php"); break;
+                    case 'chinhSuaSV': include("View/ChinhSuaSV.php"); break; 
+                    case 'xoaSV': include("View/XoaSV.php"); break;
+                    case 'xemTTCT': include("View/TTChiTiet.php"); break;
+                    case 'logout': include("View/Logout.php"); break;
+                    default: include("View/DanhSachSV.php"); break;
+                }
             ?>
         </main>
     </div>
