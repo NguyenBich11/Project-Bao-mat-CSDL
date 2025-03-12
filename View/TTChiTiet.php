@@ -128,3 +128,18 @@
         document.getElementById('studentForm').reset();
     });
 </script>
+<?php
+        if ($students && $students->num_rows > 0) {
+            while ($row = $students->fetch_assoc()) {
+                echo "<tr>
+                        <td>{$row['mssv']}</td>
+                        <td>{$row['hoten']}</td>
+                        <td>{$row['ngaysinh']}</td>
+                        <td>{$row['gioitinh']}</td>
+                        <td>{$row['lopdanhnghia']}</td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='5'>Không có sinh viên nào!</td></tr>";
+        }
+        ?>
