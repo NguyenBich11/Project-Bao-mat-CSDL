@@ -1,5 +1,3 @@
-cUser:
-
 <?php
 include("../Model/mUser.php");  
     class cUser{
