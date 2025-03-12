@@ -21,7 +21,7 @@
             $password = md5($password);// cách để mã hóa 
             $tblUser = $p->register($stdName, $userName, $password);
             if($tblUser == 2){
-                echo "<script>alert('Tài khoản đã tồn tại')</script>";
+                echo "<script>alert('Tài khoản đã tồn tại!')</script>";
             } else if($tblUser == 5){
                 echo "<script>alert('Lỗi kết nối!')</script>";
             }
