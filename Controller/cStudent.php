@@ -16,6 +16,7 @@
                 // echo "<script>alert('Không thể thêm sinh viên!')</script>";
                 header("Location: index.php?act=themSV&status=fail");// Không thể thêm SV
             }
+
         }
 
         public function updateStudent() {
@@ -35,10 +36,27 @@
         //         header("Location: index.php?act=themSV&status=fail"); // Không thể thêm SV
         //     }
         // }
-
-
-        public function deleteStudent() {
-            
+        
+        public function getStudents() {
+            $p = new clsStudent();
+            return $p->getStudents(); // Lấy danh sách sinh viên từ Model
         }
-    }
+
+        public function deleteStudent($mssv) {
+            $p = new clsStudent();
+            $result = $p->deleteStudent($mssv);
+        
+            if ($result == 1) {
+                echo "<script>
+                showAlert('Xóa sinh viên thành công!', 'warning');
+                setTimeout(2000);
+            </script>"; // Xóa thành công
+            } else {
+                header("Location: index.php?act=danhSachSV&status=error_db"); // Lỗi CSDL
+            }
+            header('Location: index.php');
+            exit();
+        }
+        
+}
 ?>

@@ -28,7 +28,7 @@ include("../Model/mUser.php");
             else if($tblUser == 3){
                 echo "<script>alert('Đăng ký thành công!')</script>";
             } else {
-                echo "<script>alert('Không thể thêm tài khoản!')</script>";
+                echo "<script>alert('Không thể thêm tài khoản! ')</script>";
             }
         }
     }
