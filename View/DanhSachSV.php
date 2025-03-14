@@ -56,11 +56,6 @@ if(isset($_GET['status'])) {
         </script>";
     }
 }
-
-// Lấy danh sách sinh viên từ controller
-include_once("Controller/cStudent.php");
-$studentController = new cStudent();
-$studentList = $studentController->getStudents();
 ?>
 
 <!-- Main Content -->
@@ -85,8 +80,8 @@ $studentList = $studentController->getStudents();
         <tbody>
             <?php
             // Lấy danh sách sinh viên từ database
-            include_once("Model/clsStudent.php");
-            $student = new clsStudent();
+            include_once("Controller/cStudent.php");
+            $student = new cStudent();
             $result = $student->getStudents(); // Bạn cần thêm method này vào class clsStudent
             
             if ($result->num_rows > 0) {

@@ -32,7 +32,7 @@
 <div class="col-md-10 d-flex flex-column align-items-center">
     <h2 class="text-center mt-4 mb-4 display-4 fw-bold">THÊM THÔNG TIN SINH VIÊN</h2>
     <div class="content col-md-8">
-        <form id="studentForm" action="" method="POST" name="formEdit" class="form-container">
+        <form id="studentForm" action="#" method="POST" name="formEdit" class="form-container">
             <div class="form-group row mb-4 align-items-center">
                 <label class="col-sm-4 col-form-label text-secondary">Mã số sinh viên</label>
                 <div class="col-sm-8">
@@ -126,59 +126,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <p class="fw-bold">Lỗi! Nhập đủ các trường thông tin!</p>
+                <p class="fw-bold">Lỗi! Không nhập đủ các trường thông tin!</p>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const params = new URLSearchParams(window.location.search);
-        const status = params.get("status");
-
-        if (status === "success") {
-            new bootstrap.Modal(document.getElementById('LuuThanhcong')).show();
-        } else if (status === "fail") {
-            new bootstrap.Modal(document.getElementById('LuuLoi')).show();
-        } else if (status === "error_db") {
-            new bootstrap.Modal(document.getElementById('LoiKetNoi')).show();
-        } else if (status === "exist") {
-            new bootstrap.Modal(document.getElementById('TonTai')).show();
-        } 
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    document.getElementById('studentForm').addEventListener('submit', function(event) {
-        // event.preventDefault(); // Ngăn chặn form submit mặc định
-
-        // Lấy giá trị từ các trường input
-        const studentId = document.getElementById('studentId').value.trim();
-        const studentName = document.getElementById('studentName').value.trim();
-        const birthDate = document.getElementById('birthDate').value.trim();
-        const className = document.getElementById('className').value.trim();
-
-        // Kiểm tra xem các trường có được nhập đầy đủ không
-        if (!studentId || !studentName || !birthDate || !className) {
-            event.preventDefault(); // Ngăn form submit nếu thiếu thông tin
-            // Hiển thị modal lỗi nếu thiếu thông tin
-            const errorModal = new bootstrap.Modal(document.getElementById('LuuLoi'));
-            errorModal.show();
-        } else {
-            // Nếu đầy đủ thông tin, hiển thị modal thành công
-            // const successModal = new bootstrap.Modal(document.getElementById('LuuThanhcong'));
-            // successModal.show();
-            // return true;
-        }
-    });
-
-    document.getElementById('resetButton').addEventListener('click', function() {
-        // Reset form
-        document.getElementById('studentForm').reset();
-    });
-</script>
 
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnAddStd'])) {
@@ -187,3 +139,5 @@
         $p->addStudent($_POST["txtstudentId"], $_POST["txtstudentName"], $_POST["dbirthDate"], $_POST["gender"], $_POST["txtclassName"]);
     }
 ?>
+<script src="View/js/themSV.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
