@@ -3,14 +3,36 @@ document.addEventListener("DOMContentLoaded", function () {
     const status = params.get("status");
 
     if (status === "success") {
-        new bootstrap.Modal(document.getElementById('LuuThanhcong')).show();
+        showModalAndRemoveStatus('LuuThanhcong');
     } else if (status === "fail") {
-        new bootstrap.Modal(document.getElementById('LuuLoi')).show();
+        showModalAndRemoveStatus('LuuLoi');
     } else if (status === "error_db") {
-        new bootstrap.Modal(document.getElementById('LoiKetNoi')).show();
+        showModalAndRemoveStatus('LoiKetNoi');
     } else if (status === "exist") {
-        new bootstrap.Modal(document.getElementById('TonTai')).show();
-    } 
+        showModalAndRemoveStatus('TonTai');
+    }
+
+    function showModalAndRemoveStatus(modalId) {
+        const modal = new bootstrap.Modal(document.getElementById(modalId));
+        modal.show();
+
+        // Lắng nghe sự kiện đóng modal
+        document.getElementById(modalId).addEventListener('hidden.bs.modal', function () {
+            // Loại bỏ tham số status khỏi URL
+            removeStatusFromUrl();
+        });
+    }
+
+    function removeStatusFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('status'); // Xóa tham số status
+
+        // Tạo URL mới mà không có tham số status
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+
+        // Thay đổi URL mà không tải lại trang
+        window.history.replaceState({}, document.title, newUrl);
+    }
 
 });
 

@@ -28,6 +28,7 @@
         border-radius: 36px;
     }
 </style>
+
 <!-- Main Content -->
 <div class="col-md-10 d-flex flex-column align-items-center">
     <h2 class="text-center mt-4 mb-4 display-4 fw-bold">THÊM THÔNG TIN SINH VIÊN</h2>
@@ -64,6 +65,24 @@
                     <input type="text" id="className" name="txtclassName" class="form-control" placeholder="Nhập lớp danh nghĩa">
                 </div>
             </div>
+            <div class="form-group row mb-4 align-items-center">
+                <label class="col-sm-4 col-form-label text-secondary">Điểm toán cao cấp</label>
+                <div class="col-sm-8">
+                    <input type="number" id="classToan" name="diemtoan" class="form-control" placeholder="Nhập điểm toán cao cấp">
+                </div>
+            </div>
+            <div class="form-group row mb-4 align-items-center">
+                <label class="col-sm-4 col-form-label text-secondary">Điểm Anh văn</label>
+                <div class="col-sm-8">
+                    <input type="number" id="classAV" name="diemanhvan" class="form-control" placeholder="Nhập điểm anh văn">
+                </div>
+            </div>
+            <div class="form-group row mb-4 align-items-center">
+                <label class="col-sm-4 col-form-label text-secondary">Điểm Kỹ thuật lập trình</label>
+                <div class="col-sm-8">
+                    <input type="number" id="classLT" name="diemlaptrinh" class="form-control" placeholder="Nhập điểm kỹ thuật lập trình">
+                </div>
+            </div>
             <div class="d-flex justify-content-end gap-4">
                 <button type="reset" id="resetButton" class="button-me btn btn-warning fw-bold text-dark">Đặt lại</button>
                 <button type="submit" id="submitButton" class="button-me btn btn-warning fw-bold text-dark" name="btnAddStd">Thêm</button>
@@ -78,7 +97,7 @@
         <div class="modal-content">
             <div class="modal-header border-0 justify-content-center">
                 <h5 class="modal-title fw-bold">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body text-center">
                 <p class="fw-bold">Lỗi! MSSV đã tồn tại!</p>
@@ -93,7 +112,7 @@
         <div class="modal-content">
             <div class="modal-header border-0 justify-content-center">
                 <h5 class="modal-title fw-bold">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body text-center">
                 <p class="fw-bold">Lưu thông tin thành công!</p>
@@ -108,10 +127,10 @@
         <div class="modal-content">
             <div class="modal-header border-0 justify-content-center">
                 <h5 class="modal-title fw-bold">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body text-center">
-                <p class="fw-bold text-danger">Lưu lỗi!</p>
+                <p class="fw-bold text-danger">Lỗi khi lưu thông tin sinh viên!</p>
             </div>
         </div>
     </div>
@@ -123,7 +142,7 @@
         <div class="modal-content">
             <div class="modal-header border-0 justify-content-center">
                 <h5 class="modal-title fw-bold">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body text-center">
                 <p class="fw-bold">Lỗi! Không nhập đủ các trường thông tin!</p>
@@ -133,11 +152,11 @@
 </div>
 
 <?php
-    if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnAddStd'])) {
-        include("Controller/cStudent.php");
-        $p = new cStudent();
-        $p->addStudent($_POST["txtstudentId"], $_POST["txtstudentName"], $_POST["dbirthDate"], $_POST["gender"], $_POST["txtclassName"]);
-    }
+   if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnAddStd'])) {
+    include("Controller/cStudent.php");
+    $p = new cStudent();
+    $p->addStudent($_POST["txtstudentId"], $_POST["txtstudentName"], $_POST["dbirthDate"], $_POST["gender"], $_POST["txtclassName"], $_POST["diemtoan"], $_POST["diemanhvan"], $_POST["diemlaptrinh"]);
+}
 ?>
 <script src="View/js/themSV.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

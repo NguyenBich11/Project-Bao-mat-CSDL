@@ -84,17 +84,17 @@ if(isset($_GET['status'])) {
             $student = new cStudent();
             $result = $student->getStudents(); // Bạn cần thêm method này vào class clsStudent
             
-            if ($result->num_rows > 0) {
+            if (is_array($result)) {
                 $stt = 1;
-                while($row = $result->fetch_assoc()) {
+                foreach($result as $key=>$row) {
                     echo "<tr>
                         <td>".$stt++."</td>
                         <td>".$row['mssv']."</td>
                         <td>".$row['hoten']."</td>
                         <td>".$row['ngaysinh']."</td>
                         <td>".$row['gioitinh']."</td>
-                        <td>".$row['lop']."</td>
-                        <td>".$row['diem']."</td>
+                        <td>".$row['lopdanhnghia']."</td>
+                        <td>".$row['diemtb']."</td>
                         <td style='display: flex; align-items: center; justify-content: center;'>
                             <form action='index.php' method='GET' name='formXemTTCTSV'>
                                 <input type='hidden' name='act' value='xemTTCT'>
