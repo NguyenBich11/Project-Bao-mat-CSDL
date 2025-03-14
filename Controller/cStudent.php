@@ -22,21 +22,20 @@
 
         }
 
-        public function insertStudent() {
-            public function insertStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN) {
-        $p = new clsConnect();
-        $result = $p->insertStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN);
+        // public function insertStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN) {
+        //     $p = new clsConnect();
+        //     // $result = $p->insertStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN);
+        //     $rs = $p->insertStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN);
 
-        if ($result == "MSSV đã tồn tại!") {
-            header("Location: index.php?act=themSV&status=exist"); // MSSV đã tồn tại
-        } else if ($result == "Danh sách sinh viên!") {
-            header("Location: index.php?act=themSV&status=success"); // Thêm SV thành công
-        } else {
-            header("Location: index.php?act=themSV&status=fail"); // Không thể thêm SV
-        }
-    }
+        //     if ($rs == "MSSV đã tồn tại!") {
+        //         header("Location: index.php?act=themSV&status=exist"); // MSSV đã tồn tại
+        //     } else if ($rs == "Danh sách sinh viên!") {
+        //         header("Location: index.php?act=themSV&status=success"); // Thêm SV thành công
+        //     } else {
+        //         header("Location: index.php?act=themSV&status=fail"); // Không thể thêm SV
+        //     }
+        // }
 
-        }
 
         public function deleteStudent() {
             
