@@ -3,7 +3,7 @@
 ?>
 <!-- Sidebar -->
 <div class="sidebar col-2" id="sidebar">
-    <div class="brand">Nguyen Thi Ngoc Bich</div>
+    <div class="brand"><?php echo $_SESSION['user']; ?></div>
 
     <a href="index.php?act=danhSachSV" class="menu-item <?php echo ($activePage == 'danhSachSV') ? 'active' : ''; ?>">
         <i class="fa-solid fa-list"></i> Danh sách sinh viên
