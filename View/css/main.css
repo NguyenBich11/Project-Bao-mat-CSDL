@@ -71,9 +71,9 @@
 
 .btn {
     min-width: 160px;
-    padding: 12px 24px;
+    padding: 12px 24px !important;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 16px !important;
     font-weight: bold;
 }
 

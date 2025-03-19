@@ -5,8 +5,7 @@ session_start();
     switch($act) {
         case 'themSV': include("View/ThemSV.php"); break;
         case 'chinhSuaSV': include("View/ChinhSuaSV.php"); break; 
-        case 'xoaSV': include("View/XoaSV.php"); break;
-        case 'xemTTCT': include("View/TTChiTiet.php"); break;
+        // case 'xoaSV': include("View/xoaSV.php"); break; 
         case 'logout': include("View/Logout.php"); break;
         default: include("View/DanhSachSV.php"); break;
     }

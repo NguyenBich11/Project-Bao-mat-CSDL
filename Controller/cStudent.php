@@ -1,5 +1,5 @@
 <?php 
-    include("Model/mStudent.php");  
+    include_once("Model/mStudent.php");  
     class cStudent{
         public function addStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT) {
             $p = new clsStudent();
@@ -20,10 +20,21 @@
         public function updateStudent() {
 
         }
-        
-        public function getStudents() {
+
+        public function getStudents($mssv) {
             $p = new clsStudent();
-            $rsGet = $p->getStudents(); // Lấy danh sách sinh viên từ Model
+            $result = $p->getStudents($mssv);
+        
+            if ($result == 3) {
+                return $result;
+            } else {
+                header("Location: index.php?act=danhSachSV&status=error_db"); // Lỗi CSDL
+            }
+        }
+        
+        public function getAllStudents() {
+            $p = new clsStudent();
+            $rsGet = $p->getAllStudents(); // Lấy danh sách sinh viên từ Model
 
             if($rsGet) {
                 return $rsGet;
@@ -34,18 +45,28 @@
 
         public function deleteStudent($mssv) {
             $p = new clsStudent();
-            $result = $p->deleteStudent($mssv);
+            $result = $p->mdeleteStudent($mssv);
         
-            if ($result == 3) {
-                echo "<script>
-                    showAlert('Xóa sinh viên thành công!', 'warning');
-                    setTimeout(2000);
-                </script>"; // Xóa thành công
-            } else {
-                header("Location: index.php?act=danhSachSV&status=error_db"); // Lỗi CSDL
+            if ($result == 1) {
+                return 1; // Lỗi kết nối
+            } else if ($result == 2) {
+                return 2; // Không có thông tin
+            } else if ($result == 3) {
+                return 3; // Xóa thành công
+            } else if ($result == 4) {
+                return 4; // Không tìm thấy MSSV
             }
-            // header('Location: index.php');
-            // exit();
+        }
+
+        public function getAllStudentsByID($mssv) {
+            $p = new clsStudent();
+            $rsGet = $p->mgetStudentById($mssv); // Lấy danh sách sinh viên từ Model
+
+            if($rsGet) {
+                return $rsGet;
+            }else {
+                header("Location: index.php");
+            }
         }
     }
 ?>

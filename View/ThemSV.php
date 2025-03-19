@@ -2,33 +2,6 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 1);    
 ?>
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: #f8f9fa;
-    }
-    .form-container {
-        font-size: 2.1rem;
-    }
-    .form-label {
-        text-align: right;
-    }
-    .form-control {
-        height: 48px;
-        font-size: 1.7rem;
-    }
-    .button-me {
-        width: 148px;
-        height: 44px;
-        font-size: 1.7rem;
-        text-align: center;
-        border-radius: 36px;
-    }
-</style>
-
 <!-- Main Content -->
 <div class="col-md-10 d-flex flex-column align-items-center">
     <h2 class="text-center mt-4 mb-4 display-4 fw-bold">THÊM THÔNG TIN SINH VIÊN</h2>
