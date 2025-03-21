@@ -1,0 +1,16 @@
+.form-container {
+    font-size: 2.1rem !important;
+}
+.form-label {
+    text-align: right !important;
+}
+.form-control {
+    height: 48px !important;
+    font-size: 1.7rem !important;
+}
+.button-me {
+    width: 148px !important;
+    font-size: 1.7rem !important;
+    text-align: center !important;
+    border-radius: 36px !important;
+}

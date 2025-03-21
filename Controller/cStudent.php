@@ -1,5 +1,5 @@
 <?php 
-    include("Model/mStudent.php");  
+    include_once("Model/mStudent.php");  
     class cStudent{
         public function addStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT) {
             $p = new clsStudent();
@@ -17,35 +17,72 @@
             }
         }
 
-        public function updateStudent() {
+        public function cUpdateStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT) {
+            $p = new clsStudent();
+            $rsUpdate = $p->mUpdateStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT);
 
+            if($rsUpdate){
+                return true;
+            }else {
+                return false;
+            }
+        }
+
+        public function getStudents($mssv) {
+            $p = new clsStudent();
+            $result = $p->getStudents($mssv);
+        
+            if ($result == 3) {
+                return $result;
+            } else {
+                header("Location: index.php?act=danhSachSV&status=error_db"); // Lỗi CSDL
+            }
         }
         
-        public function getStudents() {
+        public function getAllStudents() {
             $p = new clsStudent();
-            $rsGet = $p->getStudents(); // Lấy danh sách sinh viên từ Model
+            $rsGet = $p->getAllStudents(); // Lấy danh sách sinh viên từ Model
 
             if($rsGet) {
                 return $rsGet;
             }else {
-                header("Location: index.php");
+                return null;
+                // header("Location: index.php");
             }
         }
 
         public function deleteStudent($mssv) {
             $p = new clsStudent();
-            $result = $p->deleteStudent($mssv);
+            $result = $p->mdeleteStudent($mssv);
         
             if ($result == 3) {
-                echo "<script>
-                    showAlert('Xóa sinh viên thành công!', 'warning');
-                    setTimeout(2000);
-                </script>"; // Xóa thành công
+                return true;
             } else {
-                header("Location: index.php?act=danhSachSV&status=error_db"); // Lỗi CSDL
+                return null;
             }
-            // header('Location: index.php');
-            // exit();
+        }
+
+        public function getAllStudentsByID($mssv) {
+            $p = new clsStudent();
+            $rsGet = $p->mgetStudentById($mssv); // Lấy danh sách sinh viên từ Model
+
+            if($rsGet) {
+                return $rsGet;
+            }else {
+                return null;
+                // header("Location: index.php");
+            }
+        }
+
+        public function cSearch($mssv) {
+            $p = new clsStudent($mssv);
+            $rs = $p->mSearch($mssv);
+
+            if($rs) {
+                return $rs;
+            }else {
+                return null;
+            }
         }
     }
 ?>

@@ -1,39 +1,3 @@
-<style>
-    .content {
-        /*margin-left: 260px; */
-        padding: 20px;
-    }
-
-    .table th, .table td {
-        text-align: center;
-    }
-
-    .table th, .table td {
-        text-align: center;
-        vertical-align: middle;
-        padding: 6px; 
-        font-size: 15px;
-    }
-
-    .btn-action {
-        background-color: #ffc107;
-        color: black;
-        border: none;
-        font-size: 15px;
-        padding: 4px 8px;
-        border-radius: 5px;
-        margin: 0 2px;
-    }
-
-    .serach-input input, .serach-input button {
-        font-size: 1.2rem;
-    }
-
-    form {
-        margin: 0 6px;
-    }
-</style>
-
 <?php
 // Kiểm tra và hiển thị thông báo dựa trên status
 if(isset($_GET['status'])) {
@@ -63,17 +27,25 @@ if(isset($_GET['status'])) {
     <!-- ... các phần code hiện có ... -->
 
     <h2 class="text-center mb-3"><b>DANH SÁCH SINH VIÊN</b></h2>
+    <form name="formSearch" method="GET" class="width-100">
+        <input type="hidden" name="act" value="danhSachSV">
+        <input type="submit" name="btnSearch" class="btn btn-primary btn-action float-end" value="Tìm kiếm">
+        <input type="text" name="inputSearch" class="w-25 p-2 rounded-3 border border-1 fs-4 float-end mb-3" placeholder="Nhập mã số sinh viên cần tìm">
+    </form>
     <!-- Bảng danh sách sinh viên -->
     <table class="table table-bordered">
         <thead class="table-secondary">
             <tr>
-                <th>STT</th>
+            <th>STT</th>
                 <th>MSSV</th>
                 <th>Họ và tên</th>
                 <th>Ngày sinh</th>
                 <th>Giới tính</th>
                 <th>Lớp danh nghĩa</th>
-                <th>Điểm số</th>
+                <th>Điểm Toán cao cấp</th>
+                <th>Điểm Anh văn</th>
+                <th>Điểm KTLT</th>
+                <th>Điểm trung bình</th>
                 <th>Thao Tác</th>
             </tr>
         </thead>
@@ -82,41 +54,84 @@ if(isset($_GET['status'])) {
             // Lấy danh sách sinh viên từ database
             include_once("Controller/cStudent.php");
             $student = new cStudent();
-            $result = $student->getStudents(); // Bạn cần thêm method này vào class clsStudent
-            
-            if (is_array($result)) {
+            $valueSearch = isset($_GET['inputSearch']) ? $_GET['inputSearch'] : '';
+
+            if(isset($_GET['btnSearch']) && !empty($valueSearch)) {
+                $rs = $student->cSearch($valueSearch);
                 $stt = 1;
-                foreach($result as $key=>$row) {
-                    echo "<tr>
-                        <td>".$stt++."</td>
-                        <td>".$row['mssv']."</td>
-                        <td>".$row['hoten']."</td>
-                        <td>".$row['ngaysinh']."</td>
-                        <td>".$row['gioitinh']."</td>
-                        <td>".$row['lopdanhnghia']."</td>
-                        <td>".$row['diemtb']."</td>
-                        <td style='display: flex; align-items: center; justify-content: center;'>
-                            <form action='index.php' method='GET' name='formXemTTCTSV'>
-                                <input type='hidden' name='act' value='xemTTCT'>
-                                <input type='hidden' name='mssv' value='".$row['mssv']."'>
-                                <button class='btn btn-primary btn-action'><i class='fa-solid fa-eye'></i></button>
-                            </form>
-                            <form action='index.php' method='GET' name='formChinhSuaSV'>
-                                <input type='hidden' name='act' value='chinhSuaSV'>
-                                <input type='hidden' name='mssv' value='".$row['mssv']."'>
-                                <button class='btn btn-primary btn-action'><i class='fa-solid fa-pen'></i></button>
-                            </form>
-                            <button type='button' class='btn btn-primary btn-action btn-delete' 
-                                data-bs-toggle='modal' 
-                                data-bs-target='#confirmModal' 
-                                data-mssv='".$row['mssv']."'>
-                                <i class='fa-solid fa-trash'></i>
-                            </button>
-                        </td>
-                    </tr>";
+                if(isset($_GET['btnSearch']) && !empty($valueSearch)) {
+                    $rs = $student->cSearch($valueSearch);
+                    if($rs !== null && is_array($rs)) {  // Check if result is array and not null
+                        echo "<tr>";
+                        echo "<td>".$stt."</td>";
+                        echo "<td>".$rs['mssv']."</td>";
+                        echo "<td>".$rs['hoten']."</td>";
+                        echo "<td>".$rs['ngaysinh']."</td>";
+                        echo "<td>".$rs['gioitinh']."</td>";
+                        echo "<td>".$rs['lopdanhnghia']."</td>";
+                        echo "<td>".$rs['toancaocap']."</td>";
+                        echo "<td>".$rs['anhvan']."</td>";
+                        echo "<td>".$rs['kythuatlt']."</td>";
+                        echo "<td>".$rs['diemtb']."</td>";
+                        echo "<td style='display: flex; align-items: center; justify-content: center;'>
+                                <form method='post' action='index.php?act=chinhSuaSV' style='margin-right: 5px;'>
+                                    <input type='hidden' name='mssv' value='".$rs['mssv']."'>
+                                    <button type='submit' class='btn btn-primary btn-action'>
+                                        <i class='fa-solid fa-pen'></i>
+                                    </button>
+                                </form>
+                                <button type='button' class='btn btn-primary btn-action btn-delete' 
+                                    data-bs-toggle='modal' 
+                                    data-bs-target='#confirmModal' 
+                                    data-mssv='".$rs['mssv']."'>
+                                    <i class='fa-solid fa-trash'></i>
+                                </button>
+                            </td>";
+                        echo "</tr>";
+                    } else {
+                        echo "<tr><td colspan='11' class='text-center'>Không tìm thấy sinh viên</td></tr>";
+                    
+                    }
+                }else {
+                    echo "<tr><td colspan='8' class='text-center'>Không có dữ liệu sinh viên</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='8' class='text-center'>Không có dữ liệu sinh viên</td></tr>";
+            }else {
+                //In ra sinh viên
+                $result = $student->getAllStudents();
+                            
+                if (is_array($result)) {
+                    $stt = 1;
+                    foreach($result as $key=>$row) {
+                        echo "<tr>
+                            <td>".$stt++."</td>
+                            <td>".$row['mssv']."</td>
+                            <td>".$row['hoten']."</td>
+                            <td>".$row['ngaysinh']."</td>
+                            <td>".$row['gioitinh']."</td>
+                            <td>".$row['lopdanhnghia']."</td>
+                            <td>".$row['toancaocap']."</td>
+                            <td>".$row['anhvan']."</td>
+                            <td>".$row['kythuatlt']."</td>
+                            <td>".$row['diemtb']."</td>
+                            <td style='display: flex; align-items: center; justify-content: center;'>
+                                <form method='post' action='index.php?act=chinhSuaSV' style='margin-right: 5px;'>
+                                    <input type='hidden' name='mssv' value='".$row['mssv']."'>
+                                    <button type='submit' class='btn btn-primary btn-action'>
+                                        <i class='fa-solid fa-pen'></i>
+                                    </button>
+                                </form>
+                                <button type='button' class='btn btn-primary btn-action btn-delete' 
+                                    data-bs-toggle='modal' 
+                                    data-bs-target='#confirmModal' 
+                                    data-mssv='".$row['mssv']."'>
+                                    <i class='fa-solid fa-trash'></i>
+                                </button>
+                            </td>
+                        </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='8' class='text-center'>Không có dữ liệu sinh viên nào</td></tr>";
+                }
             }
             ?>
         </tbody>
@@ -159,15 +174,24 @@ if(isset($_GET['status'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    let deleteButtons = document.querySelectorAll(".btn-delete");
-    let confirmDelete = document.getElementById("confirmDelete");
-
-    deleteButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            let mssv = this.getAttribute("data-mssv");
-            confirmDelete.href = "index.php?act=xoaSV&mssv=" + mssv;
+    document.addEventListener("DOMContentLoaded", function() {
+        let deleteButtons = document.querySelectorAll(".btn-delete");
+        let confirmDelete = document.getElementById("confirmDelete");
+        let updateBuntton = document.querySelectorAll(".btn-update");
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                let mssv = this.getAttribute("data-mssv");
+                confirmDelete.href = "index.php?act=xoaSV&mssv=" + mssv;
+            });
         });
+
+        // updateBuntton.forEach(button => {
+        //     button.addEventListener("click", function() {
+        //         let mssv = this.getAttribute("data-mssv");
+        //         alert("Nút update");
+        //         window.location.href = "index.php?act=chinhSuaSV&mssv=" + mssv;
+        //     });
+        // });
     });
-});
 </script>
