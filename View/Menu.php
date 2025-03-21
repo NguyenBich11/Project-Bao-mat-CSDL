@@ -11,7 +11,4 @@
     <a href="index.php?act=themSV" class="menu-item <?php echo ($activePage == 'themSV') ? 'active' : ''; ?>">
         <i class="fa-solid fa-user-plus"></i> Thêm sinh viên
     </a>
-    <a href="index.php?act=chinhSuaSV" class="menu-item <?php echo ($activePage == 'chinhSuaSV') ? 'active' : ''; ?>">
-        <i class="fa-solid fa-user-pen"></i> Chỉnh sửa thông tin 
-    </a>
 </div>

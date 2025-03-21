@@ -26,3 +26,9 @@
 form {
     margin: 0 6px;
 }
+
+.input-search {
+    width: 40% !important;
+    border-radius: 4px;
+    padding: 6px;
+}

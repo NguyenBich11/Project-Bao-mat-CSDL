@@ -17,8 +17,15 @@
             }
         }
 
-        public function updateStudent() {
+        public function cUpdateStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT) {
+            $p = new clsStudent();
+            $rsUpdate = $p->mUpdateStudent($mssv, $hoTen, $ngaySinh, $gioiTinh, $lopDN, $diemToanCC, $diemAV, $diemKTLT);
 
+            if($rsUpdate){
+                return true;
+            }else {
+                return false;
+            }
         }
 
         public function getStudents($mssv) {
@@ -39,7 +46,8 @@
             if($rsGet) {
                 return $rsGet;
             }else {
-                header("Location: index.php");
+                return null;
+                // header("Location: index.php");
             }
         }
 
@@ -47,14 +55,10 @@
             $p = new clsStudent();
             $result = $p->mdeleteStudent($mssv);
         
-            if ($result == 1) {
-                return 1; // Lỗi kết nối
-            } else if ($result == 2) {
-                return 2; // Không có thông tin
-            } else if ($result == 3) {
-                return 3; // Xóa thành công
-            } else if ($result == 4) {
-                return 4; // Không tìm thấy MSSV
+            if ($result == 3) {
+                return true;
+            } else {
+                return null;
             }
         }
 
@@ -65,7 +69,19 @@
             if($rsGet) {
                 return $rsGet;
             }else {
-                header("Location: index.php");
+                return null;
+                // header("Location: index.php");
+            }
+        }
+
+        public function cSearch($mssv) {
+            $p = new clsStudent($mssv);
+            $rs = $p->mSearch($mssv);
+
+            if($rs) {
+                return $rs;
+            }else {
+                return null;
             }
         }
     }

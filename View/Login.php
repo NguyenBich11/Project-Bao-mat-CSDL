@@ -5,12 +5,39 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="View/css/base.css">
-    <link rel="stylesheet" href="View/css/main.css">
-    <link rel="stylesheet" href="View/css/login.css">
+    <link rel="stylesheet" href="css/main.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Hệ thống quản lý sinh viên</title>
+
+    <style>
+        body {
+            height: 100vh;
+            background-color: #08183a !important;
+        }
+
+        .container-fluid {
+            height: 100vh;
+        }
+
+        .card {
+            width: 400px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            margin: 0; /* Đảm bảo không có margin gây lệch */
+        }
+        .btn-warning {
+            background-color: #fbc02d;
+            border: none;
+        }
+        .btn-warning:hover {
+            background-color: #e6a700;
+        }
+        .form-switch label {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid d-flex justify-content-center align-items-center">
@@ -54,8 +81,8 @@ session_start();
         </form>
     </div>
 </div>
-
 </body>
+<script src="js/login.js"></script>
 <?php
     if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['btnLogin'])) {
         include("../Controller/cUser.php");
