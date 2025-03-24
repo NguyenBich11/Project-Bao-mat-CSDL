@@ -41,19 +41,19 @@
             <div class="form-group row mb-4 align-items-center">
                 <label class="col-sm-4 col-form-label text-secondary">Điểm toán cao cấp</label>
                 <div class="col-sm-8">
-                    <input type="number" id="classToan" name="diemtoan" class="form-control" placeholder="Nhập điểm toán cao cấp">
+                    <input type="number" id="classToan" name="diemtoan" class="form-control" placeholder="Nhập điểm toán cao cấp" min="0" max="10" step="0.1">
                 </div>
             </div>
             <div class="form-group row mb-4 align-items-center">
                 <label class="col-sm-4 col-form-label text-secondary">Điểm Anh văn</label>
                 <div class="col-sm-8">
-                    <input type="number" id="classAV" name="diemanhvan" class="form-control" placeholder="Nhập điểm anh văn">
+                    <input type="number" id="classAV" name="diemanhvan" class="form-control" placeholder="Nhập điểm anh văn" min="0" max="10" step="0.1">
                 </div>
             </div>
             <div class="form-group row mb-4 align-items-center">
                 <label class="col-sm-4 col-form-label text-secondary">Điểm Kỹ thuật lập trình</label>
                 <div class="col-sm-8">
-                    <input type="number" id="classLT" name="diemlaptrinh" class="form-control" placeholder="Nhập điểm kỹ thuật lập trình">
+                    <input type="number" id="classLT" name="diemlaptrinh" class="form-control" placeholder="Nhập điểm kỹ thuật lập trình" min="0" max="10" step="0.1">
                 </div>
             </div>
             <div class="d-flex justify-content-end gap-4">

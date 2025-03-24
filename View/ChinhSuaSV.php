@@ -13,8 +13,6 @@
                     $p = new cStudent();
                     $student = $p->getAllStudentsByID($mssv);
 
-                    // echo $student;
-
                     if(is_array($student)) {
                         echo '
                         <form action="#" method="POST" name="formEdit" class="form-container">
@@ -54,19 +52,19 @@
                             <div class="form-group row mb-4 align-items-center">
                                 <label class="col-sm-4 col-form-label text-secondary">Điểm toán cao cấp</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="classToan" name="diemtoan" class="form-control" value="'.$student['toancaocap'].'">
+                                    <input type="number" id="classToan" name="diemtoan" class="form-control" min="0" max="10" step="0.1" value="'.$student['toancaocap'].'">
                                 </div>
                             </div>
                             <div class="form-group row mb-4 align-items-center">
                                 <label class="col-sm-4 col-form-label text-secondary">Điểm Anh văn</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="classAV" name="diemanhvan" class="form-control" value="'.$student['anhvan'].'">
+                                    <input type="number" id="classAV" name="diemanhvan" class="form-control" min="0" max="10" step="0.1" value="'.$student['anhvan'].'">
                                 </div>
                             </div>
                             <div class="form-group row mb-4 align-items-center">
                                 <label class="col-sm-4 col-form-label text-secondary">Điểm Kỹ thuật lập trình</label>
                                 <div class="col-sm-8">
-                                    <input type="number" id="classLT" name="diemlaptrinh" class="form-control" value="'.$student['kythuatlt'].'">
+                                    <input type="number" id="classLT" name="diemlaptrinh" class="form-control" min="0" max="10" step="0.1" value="'.$student['kythuatlt'].'">
                                 </div>
                             </div>
                         ';
@@ -81,7 +79,6 @@
             </div>
             <?php 
                 if(isset($_POST['btnSave'])) {
-                    echo "<script>alert('có nút')</script>";
                     include_once("Controller/cStudent.php");
                     $p = new cStudent();
                     $mssv = $_POST['txtstudentId'];
@@ -94,18 +91,26 @@
                     $diemlaptrinh = $_POST['diemlaptrinh'];
 
                     $rs = $p->cUpdateStudent($mssv, $hoten, $ngaysinh, $gioitinh, $lopdanhnghia, $diemtoan, $diemanhvan, $diemlaptrinh);
-
-                    if($rs) {
-                        echo "<script>alert('Chạy thành công')</script>";
-                    }else {
-                        echo "<script>alert('Chạy ko thành công')</script>";
-                    }
                     
-                    // if ($rs) {
-                    //     echo "<script>document.addEventListener('DOMContentLoaded', function() { var myModal = new bootstrap.Modal(document.getElementById('LuuThanhcong')); myModal.show(); });</script>";
-                    // } else {
-                    //     echo "<script>document.addEventListener('DOMContentLoaded', function() { var myModal = new bootstrap.Modal(document.getElementById('LoiKetNoi')); myModal.show(); });</script>";
-                    // }
+                    if ($rs) {
+                        echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() { 
+                                var myModal = new bootstrap.Modal(document.getElementById('LuuThanhcong'));
+                                myModal.show();
+                                
+                                document.getElementById('LuuThanhcong').addEventListener('hidden.bs.modal', function () {
+                                    window.location.href = 'index.php';
+                                });
+                            });
+                        </script>";
+                    } else {
+                        echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() { 
+                                var myModal = new bootstrap.Modal(document.getElementById('LoiKetNoi')); 
+                                myModal.show(); 
+                            });
+                        </script>";
+                    }
                 }
             ?>
         </form>

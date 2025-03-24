@@ -138,6 +138,21 @@ if(isset($_GET['status'])) {
     </table>
 </div>
 
+<!-- Modal Xóa thành công -->
+<div class="modal fade" id="XoaThanhcong" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 justify-content-center">
+                <h5 class="modal-title fw-bold">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="fw-bold">Xóa sinh viên thành công!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Xác nhận Xóa -->
 <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -174,10 +189,26 @@ if(isset($_GET['status'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+   document.addEventListener("DOMContentLoaded", function() {
+        // Check for status parameter
+        const params = new URLSearchParams(window.location.search);
+        const status = params.get("status");
+
+        if (status === "delete_success") {
+            const modal = new bootstrap.Modal(document.getElementById('XoaThanhcong'));
+            modal.show();
+            
+            // Remove status parameter after showing modal
+            document.getElementById('XoaThanhcong').addEventListener('hidden.bs.modal', function () {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('status');
+                window.history.replaceState({}, '', url);
+            });
+        }
+
+        // Existing delete confirmation code
         let deleteButtons = document.querySelectorAll(".btn-delete");
         let confirmDelete = document.getElementById("confirmDelete");
-        let updateBuntton = document.querySelectorAll(".btn-update");
         
         deleteButtons.forEach(button => {
             button.addEventListener("click", function() {
@@ -185,13 +216,5 @@ if(isset($_GET['status'])) {
                 confirmDelete.href = "index.php?act=xoaSV&mssv=" + mssv;
             });
         });
-
-        // updateBuntton.forEach(button => {
-        //     button.addEventListener("click", function() {
-        //         let mssv = this.getAttribute("data-mssv");
-        //         alert("Nút update");
-        //         window.location.href = "index.php?act=chinhSuaSV&mssv=" + mssv;
-        //     });
-        // });
     });
 </script>
