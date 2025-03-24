@@ -11,39 +11,45 @@
                 return 5; // Lỗi kết nối
             }
             try {
-                // Kiểm tra xem MSSV đã tồn tại chưa
-                $queryCheckmssv = "SELECT mssv FROM sinhvien WHERE mssv = '$mssv'";
-                $resultCheck = $conn->query($queryCheckmssv);
                 $key = 'mot_khoa_16_byte';
                 $aes = new AesCtr($key);
-                if ($resultCheck->num_rows > 0) {
-                    return 2; // MSSV đã tồn tại
-                } else {
-                    $mssvMaHoa = $aes->encrypt($mssv, $key, 128);
-                    $diemTCCMaHoa = $aes->encrypt($diemToanCC, $key, 128);
-                    $diemAVMaHoa = $aes->encrypt($diemAV, $key, 128);
-                    $diemKTLTMaHoa = $aes->encrypt($diemKTLT, $key, 128);
-
-                    // Thêm sinh viên mới 
-                    $queryAddStd = "INSERT INTO sinhvien (mssv, hoten, ngaysinh, gioitinh, lopdanhnghia) VALUES ('$mssvMaHoa', '$hoTen', '$ngaySinh', '$gioiTinh', '$lopDN')";
-                    $rsAddSstudent = $conn->query($queryAddStd);
-                    
-                    // Thêm điểm trung bình
-                    $diemTB = ($diemToanCC + $diemAV + $diemKTLT) / 3;
-                    $diemTBMaHoa = $aes->encrypt($diemTB, $key, 128);
-                    $queryAddDiem = "INSERT INTO diem (mssv, toancaocap, anhvan, kythuatlt, diemtb) VALUES ('$mssvMaHoa', '$diemTCCMaHoa', '$diemAVMaHoa', '$diemKTLTMaHoa', '$diemTBMaHoa')";
-                    $rsAddDiem = $conn->query($queryAddDiem);
-            
-                    // Kiểm tra thành công 
-                    if ($rsAddSstudent) {
-                        if ($rsAddDiem) {
-                            return 3; // Thêm sinh viên và điểm thành công
-                        } else {
-                            return 4; // Lỗi khi thêm điểm
+                
+                // Check if MSSV exists (after decryption)
+                $query = "SELECT mssv FROM sinhvien";
+                $result = $conn->query($query);
+                
+                if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $mssvDecrypted = $aes->decrypt($row['mssv'], $key, 128);
+                        if($mssvDecrypted === $mssv) {
+                            return 2; // MSSV đã tồn tại
                         }
-                    } else {
-                        return 4; // Lỗi khi thêm sinh viên
                     }
+                }
+                $mssvMaHoa = $aes->encrypt($mssv, $key, 128);
+                $diemTCCMaHoa = $aes->encrypt($diemToanCC, $key, 128);
+                $diemAVMaHoa = $aes->encrypt($diemAV, $key, 128);
+                $diemKTLTMaHoa = $aes->encrypt($diemKTLT, $key, 128);
+
+                // Thêm sinh viên mới 
+                $queryAddStd = "INSERT INTO sinhvien (mssv, hoten, ngaysinh, gioitinh, lopdanhnghia) VALUES ('$mssvMaHoa', '$hoTen', '$ngaySinh', '$gioiTinh', '$lopDN')";
+                $rsAddSstudent = $conn->query($queryAddStd);
+                
+                // Thêm điểm trung bình
+                $diemTB = ($diemToanCC + $diemAV + $diemKTLT) / 3;
+                $diemTBMaHoa = $aes->encrypt($diemTB, $key, 128);
+                $queryAddDiem = "INSERT INTO diem (mssv, toancaocap, anhvan, kythuatlt, diemtb) VALUES ('$mssvMaHoa', '$diemTCCMaHoa', '$diemAVMaHoa', '$diemKTLTMaHoa', '$diemTBMaHoa')";
+                $rsAddDiem = $conn->query($queryAddDiem);
+        
+                // Kiểm tra thành công 
+                if ($rsAddSstudent) {
+                    if ($rsAddDiem) {
+                        return 3; // Thêm sinh viên và điểm thành công
+                    } else {
+                        return 4; // Lỗi khi thêm điểm
+                    }
+                } else {
+                    return 4; // Lỗi khi thêm sinh viên
                 }
             } finally {
                 $p->mClose($conn); // Đảm bảo đóng kết nối
@@ -55,49 +61,64 @@
             $conn = $p->mOpen();
             
             if (!$conn) {
-                return false; // Lỗi kết nối
+                return false;
             }
             try {
                 $key = 'mot_khoa_16_byte';
                 $aes = new AesCtr($key);
                 $query = "SELECT * FROM sinhvien";
                 $result = $conn->query($query);
-
-                if($result->num_rows > 0){
+                $found = false;
+                $currentMssv = null;
+    
+                if($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
                         $mssvDecrypted = $aes->decrypt($row['mssv'], $key, 128);
                         
-                        if($mssvDecrypted === $mssv) {
-                            $diemTB = ($diemToanCC + $diemAV + $diemKTLT) / 3;
-
-                            $diemToanCCEncypt = $aes->encrypt($diemToanCC, $key, 128);
-                            $diemAnhvanEncypt = $aes->encrypt($diemAV, $key, 128);
-                            $diemKTLTEncypt = $aes->encrypt($diemKTLT, $key, 128);
-                            $diemTBEncrypt = $aes->encrypt($diemTB, $key, 128);
-                            
-                            $updateStudent = 
-                                "UPDATE sinhvien sv JOIN diem d ON sv.mssv = d.mssv 
-                                SET sv.hoten = '$hoTen', sv.ngaysinh = '$ngaySinh', sv.gioitinh = '$gioiTinh', sv.lopdanhnghia = '$lopDN', 
-                                    d.toancaocap = '$diemToanCCEncypt', d.anhvan = '$diemAnhvanEncypt', d.kythuatlt = '$diemKTLTEncypt', 
-                                    d.diemtb = '$diemTBEncrypt' 
-                                WHERE sv.mssv = '{$row['mssv']}'";
-                            $resultUpdate = $conn->query($updateStudent);
-
-                            if($resultUpdate){
-                                return true;
-                            }else {
-                                echo "<script>alert('Lỗi SQL')</script>";
-                                return false;
-                            }
-                        }else {
-                            return false;
+                        // Check if this is the current student being updated
+                        if(trim($mssvDecrypted) === trim($mssv)) {
+                            $found = true;
+                            $currentMssv = $row['mssv'];
+                            break;
                         }
-                        
                     }
                 }
-                return false;                
+    
+                if(!$found) {
+                    return false; // Student not found
+                }
+    
+                // Proceed with update since we found the correct student
+                $diemTB = ($diemToanCC + $diemAV + $diemKTLT) / 3;
+    
+                $diemToanCCEncypt = $aes->encrypt(strval($diemToanCC), $key, 128);
+                $diemAnhvanEncypt = $aes->encrypt(strval($diemAV), $key, 128);
+                $diemKTLTEncypt = $aes->encrypt(strval($diemKTLT), $key, 128);
+                $diemTBEncrypt = $aes->encrypt(strval($diemTB), $key, 128);
+                
+                $updateStudent = 
+                    "UPDATE sinhvien sv JOIN diem d ON sv.mssv = d.mssv 
+                    SET sv.hoten = ?, sv.ngaysinh = ?, sv.gioitinh = ?, sv.lopdanhnghia = ?, 
+                        d.toancaocap = ?, d.anhvan = ?, d.kythuatlt = ?, d.diemtb = ? 
+                    WHERE sv.mssv = ?";
+    
+                $stmt = $conn->prepare($updateStudent);
+                $stmt->bind_param("sssssssss", 
+                    $hoTen, $ngaySinh, $gioiTinh, $lopDN,
+                    $diemToanCCEncypt, $diemAnhvanEncypt, $diemKTLTEncypt, $diemTBEncrypt,
+                    $currentMssv
+                );
+                
+                $result = $stmt->execute();
+                $stmt->close();
+                
+                return $result;
+    
+            } catch (Exception $e) {
+                error_log("Update Error: " . $e->getMessage());
+                return false;
             } finally {
-                $p->mClose($conn); // Đảm bảo đóng kết nối
+                $p->mClose($conn);
             }
         }
 
